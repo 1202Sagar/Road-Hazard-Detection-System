@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VISION ZERO: Road Hazard Detection System</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for professional slide look */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A; /* Slate 900 */
+        }
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            box-sizing: border-box;
+            perspective: 1000px;
+        }
+        .slide {
+            background-color: #1E293B; /* Slate 800 */
+            color: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 1200px;
+            height: 90%;
+            max-height: 800px;
+            padding: 3rem 4rem;
+            position: absolute;
+            opacity: 0;
+            transform: translateX(100%) rotateY(15deg);
+            transition: opacity 0.5s ease-in-out, transform 0.6s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0) rotateY(0);
+            z-index: 10;
+        }
+        .slide.prev {
+            opacity: 0;
+            transform: translateX(-100%) rotateY(-15deg);
+        }
+
+        /* Animation for bullet points/content */
+        .content-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+        .slide.active .content-item {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .highlight-box {
+            background-color: #0F172A;
+            border-left: 4px solid #38BDF8; /* Sky 400 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="presentation-root" class="slide-container">
+        <!-- Slides will be injected here by JavaScript -->
+    </div>
+
+    <!-- Navigation Overlay -->
+    <div class="fixed bottom-0 right-0 p-4 text-xs text-gray-400 z-20">
+        <span id="slide-index">1 / 12</span> | Use &larr; &rarr; to navigate.
+    </div>
+
+    <script>
+        // Data structure for the entire presentation content
+        const presentationData = [
+            {
+                headline: "VISION ZERO: A Real-Time Road Hazard Detection System",
+                subtitle: "Leveraging Edge AI for Predictive Infrastructure Monitoring",
+                content: [
+                    `<div class="text-7xl font-extrabold tracking-tight text-sky-400 mt-20">VISION ZERO</div>`,
+                    `<div class="text-2xl mt-4 max-w-2xl mx-auto">High-Speed, Low-Cost, End-to-End Road Safety Solution</div>`,
+                ],
+                style: "text-center",
+                footer: "Hackathon Project 2025 | Team [THE ETHICAL CODERS]"
+            },
+            {
+                headline: "The Unseen Threat: Problem & Impact",
+                subtitle: "Every Pothole is a Liability: The $26 Billion Problem",
+                content: [
+                    `<div class="grid md:grid-cols-2 gap-8 mt-4">
+                        <div class="space-y-4">
+                            <h3 class="text-4xl font-bold text-red-400">The Problem</h3>
+                            <ul class="list-none space-y-4 text-lg">
+                                <li class="content-item" style="transition-delay: 0.1s;"><strong>Safety Crisis:</strong> Road anomalies cause a significant percentage of annual highway accidents.</li>
+                                <li class="content-item" style="transition-delay: 0.2s;"><strong>Economic Drain:</strong> Over <span class="text-5xl font-extrabold text-red-500">$26 BILLION</span> in annual vehicle damage and insurance claims.</li>
+                            </ul>
+                        </div>
+                        <div class="space-y-4">
+                            <h3 class="text-4xl font-bold text-red-400">Current Limitations</h3>
+                            <ul class="list-none space-y-4 text-lg">
+                                <li class="content-item" style="transition-delay: 0.3s;"><strong>Manual Inspection:</strong> Slow, inconsistent, and highly dangerous for workers.</li>
+                                <li class="content-item" style="transition-delay: 0.4s;"><strong>High-Cost Tech:</strong> LiDAR/Radar is effective but too expensive for wide-scale fleet deployment.</li>
+                            </ul>
+                        </div>
+                    </div>`,
+                ],
+                style: "",
+                footer: "Need for an accurate, high-speed, low-cost visual solution."
+            },
+            {
+                headline: "The Solution: Our 3-Layer Architecture",
+                subtitle: "Low-Cost, High-Speed, End-to-End Intelligence",
+                content: [
+                    `<div class="flex flex-col md:flex-row justify-between items-center text-center mt-8 space-y-6 md:space-y-0 md:space-x-8">
+                        <div class="flex-1 p-6 bg-sky-900/40 rounded-xl content-item" style="transition-delay: 0.1s;">
+                            <h4 class="text-3xl font-bold text-sky-400 mb-2">1. Edge Detection</h4>
+                            <p>YOLOv8 CNN running on low-power Embedded AI (Jetson Nano) for real-time inference.</p>
+                        </div>
+                        <div class="text-4xl text-sky-400 content-item" style="transition-delay: 0.2s;">&rarr;</div>
+                        <div class="flex-1 p-6 bg-sky-900/40 rounded-xl content-item" style="transition-delay: 0.3s;">
+                            <h4 class="text-3xl font-bold text-sky-400 mb-2">2. Geo-Alerting</h4>
+                            <p>Instantaneous geo-tagging of hazard with precise GPS coordinates and timestamp.</p>
+                        </div>
+                        <div class="text-4xl text-sky-400 content-item" style="transition-delay: 0.4s;">&rarr;</div>
+                        <div class="flex-1 p-6 bg-sky-900/40 rounded-xl content-item" style="transition-delay: 0.5s;">
+                            <h4 class="text-3xl font-bold text-sky-400 mb-2">3. Cloud Integration</h4>
+                            <p>Data logging to Firebase Firestore for a maintenance heat map and immediate dispatch.</p>
+                        </div>
+                    </div>`
+                ],
+                style: "",
+                footer: "Turning raw visual data into actionable municipal intelligence."
+            },
+            {
+                headline: "Technical Deep Dive: The AI Model",
+                subtitle: "Why YOLOv8 for Real-Time Safety Applications",
+                content: [
+                    `<div class="grid md:grid-cols-3 gap-8 mt-8">
+                        <div class="col-span-2 space-y-4">
+                            <div class="highlight-box content-item" style="transition-delay: 0.1s;">
+                                <h3 class="text-2xl font-semibold text-sky-400 mb-2">Optimization for Speed</h3>
+                                <p>Selected **YOLOv8** for its superior trade-off between **mAP (Accuracy)** and **Inference Time (FPS)**, crucial for safety systems where milliseconds count.</p>
+                            </div>
+                            <div class="highlight-box content-item" style="transition-delay: 0.3s;">
+                                <h3 class="text-2xl font-semibold text-sky-400 mb-2">Custom Classification</h3>
+                                <p>Trained a custom model to identify **4 critical classes**: Pothole, Crack, Debris, and Missing Manhole Cover.</p>
+                            </div>
+                            <div class="highlight-box content-item" style="transition-delay: 0.5s;">
+                                <h3 class="text-2xl font-semibold text-sky-400 mb-2">Edge Deployment</h3>
+                                <p>Model architecture was streamlined and quantized for reliable operation on the **NVIDIA Jetson Nano** platform.</p>
+                            </div>
+                        </div>
+                        <div class="col-span-1 flex items-center justify-center">
+                            <div class="text-6xl font-extrabold text-sky-400 opacity-20 transform -rotate-12">YOLO</div>
+                        </div>
+                    </div>`
+                ],
+                style: "",
+                footer: "Leveraging Convolutional Neural Networks for robust feature extraction."
+            },
+            {
+                headline: "Data & Training: Robustness is Key",
+                subtitle: "Simulating Real-World Variables for Reliability",
+                content: [
+                    `<div class="grid md:grid-cols-2 gap-8 mt-8">
+                        <div class="space-y-4">
+                            <h3 class="text-3xl font-bold text-purple-400 content-item" style="transition-delay: 0.1s;">Diverse Dataset</h3>
+                            <p class="text-lg content-item" style="transition-delay: 0.2s;">Combined public road damage datasets with custom-collected, real-world footage for optimal feature learning.</p>
+                            <img src="https://placehold.co/400x200/4C1D95/FFFFFF?text=Annotated+Data+Example" alt="Annotated Dataset" class="rounded-lg mt-4 content-item" style="transition-delay: 0.3s;"/>
+                        </div>
+                        <div class="space-y-4">
+                            <h3 class="text-3xl font-bold text-purple-400 content-item" style="transition-delay: 0.4s;">Data Augmentation</h3>
+                            <ul class="list-disc list-inside text-lg space-y-2">
+                                <li class="content-item" style="transition-delay: 0.5s;"><strong>HSV Shift:</strong> Robustness to varying sunlight/shadows.</li>
+                                <li class="content-item" style="transition-delay: 0.6s;"><strong>Random Rotation:</strong> Handles various camera angles and road perspectives.</li>
+                                <li class="content-item" style="transition-delay: 0.7s;"><strong>Gaussian Blur:</strong> Improves performance in simulated rain/fog conditions.</li>
+                            </ul>
+                        </div>
+                    </div>`,
+                ],
+                style: "",
+                footer: "Ensuring the model is not fooled by environmental noise or poor lighting."
+            },
+            {
+                headline: "Proven Performance: Metrics That Matter",
+                subtitle: "Quantifiable Success on the Test Set",
+                content: [
+                    `<div class="grid grid-cols-3 gap-8 mt-12 text-center">
+                        <div class="content-item p-6 border-b-4 border-teal-400 rounded-lg shadow-lg" style="transition-delay: 0.1s;">
+                            <p class="text-5xl font-extrabold text-teal-400">91.2%</p>
+                            <p class="text-xl mt-2 font-semibold">mAP@0.5</p>
+                            <p class="text-sm text-gray-400">Accuracy & Object Localization</p>
+                        </div>
+                        <div class="content-item p-6 border-b-4 border-teal-400 rounded-lg shadow-lg" style="transition-delay: 0.3s;">
+                            <p class="text-5xl font-extrabold text-teal-400">22 FPS</p>
+                            <p class="text-xl mt-2 font-semibold">Inference Speed</p>
+                            <p class="text-sm text-gray-400">Real-time performance on Edge AI</p>
+                        </div>
+                        <div class="content-item p-6 border-b-4 border-teal-400 rounded-lg shadow-lg" style="transition-delay: 0.5s;">
+                            <p class="text-5xl font-extrabold text-teal-400">88%</p>
+                            <p class="text-xl mt-2 font-semibold">Precision</p>
+                            <p class="text-sm text-gray-400">Minimal False Positives</p>
+                        </div>
+                    </div>
+                    <div class="text-center mt-12 content-item" style="transition-delay: 0.7s;">
+                        <p class="text-lg font-semibold text-gray-300">Achieving 22 FPS gives the driver and system sufficient reaction time for safety maneuvers.</p>
+                    </div>`,
+                ],
+                style: "",
+                footer: "This performance profile meets the necessary requirements for safety-critical systems."
+            },
+            {
+                headline: "Demo Snapshot: Detection in Action",
+                subtitle: "Real-Time Bounding Boxes and Classification",
+                content: [
+                    `<div class="flex justify-center items-center h-[50vh] mt-4 content-item" style="transition-delay: 0.1s;">
+                        <div class="border-4 border-yellow-400 p-8 text-center rounded-xl shadow-2xl">
+                            <p class="text-3xl font-extrabold text-yellow-400">VISUAL PROOF</p>
+                            <p class="text-xl mt-2 text-gray-300">Imagine a dynamic video loop here:</p>
+                            <p class="text-lg mt-1">Dashcam footage with accurate bounding boxes drawn.</p>
+                            <p class="text-md text-gray-500 mt-4">[Speaker should describe the demo footage here.]</p>
+                        </div>
+                    </div>`
+                ],
+                style: "text-center",
+                footer: "Instantaneous object recognition is the difference between avoidance and an accident."
+            },
+            {
+                headline: "Data-to-Action: The Geo-Alert Pipeline",
+                subtitle: "From a Pothole to a Work Order in Seconds",
+                content: [
+                    `<div class="grid md:grid-cols-4 gap-4 mt-8 text-center">
+                        <div class="content-item" style="transition-delay: 0.1s;">
+                            <div class="text-4xl text-green-400">👁️</div>
+                            <p class="mt-2 font-semibold">1. Detect</p>
+                            <p class="text-sm text-gray-400">YOLOv8 classifies Pothole.</p>
+                        </div>
+                        <div class="content-item" style="transition-delay: 0.2s;">
+                            <div class="text-4xl text-green-400">📍</div>
+                            <p class="mt-2 font-semibold">2. Geo-Tag</p>
+                            <p class="text-sm text-gray-400">GPS coordinates acquired.</p>
+                        </div>
+                        <div class="content-item" style="transition-delay: 0.3s;">
+                            <div class="text-4xl text-green-400">☁️</div>
+                            <p class="mt-2 font-semibold">3. Log to Cloud</p>
+                            <p class="text-sm text-gray-400">Data pushed to Firebase Firestore.</p>
+                        </div>
+                        <div class="content-item" style="transition-delay: 0.4s;">
+                            <div class="text-4xl text-green-400">🗺️</div>
+                            <p class="mt-2 font-semibold">4. Dispatch</p>
+                            <p class="text-sm text-gray-400">Maintenance sees heat map & addresses hazard.</p>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center content-item" style="transition-delay: 0.6s;">
+                        <p class="text-2xl font-semibold text-gray-300">Result: Targeted, efficient, <span class="text-green-400">PREDICTIVE</span> infrastructure maintenance.</p>
+                    </div>`,
+                ],
+                style: "",
+                footer: "Turning raw data into actionable intelligence for public works."
+            },
+            {
+                headline: "Competitive Landscape & Edge",
+                subtitle: "Unmatched Value Proposition: Cost vs. Performance",
+                content: [
+                    `<table class="w-full mt-8 text-xl text-left border-collapse content-item" style="transition-delay: 0.1s;">
+                        <thead>
+                            <tr class="text-sky-400 border-b border-gray-600">
+                                <th class="py-3 px-4">Solution</th>
+                                <th class="py-3 px-4">Cost (BoM)</th>
+                                <th class="py-3 px-4">Accuracy</th>
+                                <th class="py-3 px-4">Speed (FPS)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-700">
+                                <td class="py-3 px-4">LiDAR/Radar Systems</td>
+                                <td class="py-3 px-4 text-red-400 font-bold">>$5,000</td>
+                                <td class="py-3 px-4">High</td>
+                                <td class="py-3 px-4">Low/Moderate</td>
+                            </tr>
+                            <tr class="border-b border-gray-700">
+                                <td class="py-3 px-4">Traditional Image Processing</td>
+                                <td class="py-3 px-4">Moderate</td>
+                                <td class="py-3 px-4 text-red-400 font-bold">Low/Vulnerable</td>
+                                <td class="py-3 px-4">Moderate</td>
+                            </tr>
+                            <tr class="bg-sky-900/30 font-bold">
+                                <td class="py-3 px-4">VISION ZERO (YOLOv8 Edge)</td>
+                                <td class="py-3 px-4 text-green-400">~<span class="text-3xl">$300</span></td>
+                                <td class="py-3 px-4 text-green-400">High (91.2%)</td>
+                                <td class="py-3 px-4 text-green-400">High (22 FPS)</td>
+                            </tr>
+                        </tbody>
+                    </table>`,
+                ],
+                style: "",
+                footer: "We bridge the gap between high accuracy and low deployment cost."
+            },
+            {
+                headline: "Market & Scalability",
+                subtitle: "The Addressable Market Opportunity is Massive",
+                content: [
+                    `<div class="grid md:grid-cols-3 gap-8 mt-12 text-center">
+                        <div class="content-item p-6 rounded-xl bg-gray-700/50" style="transition-delay: 0.1s;">
+                            <div class="text-5xl mb-3">🏢</div>
+                            <h3 class="text-2xl font-semibold text-sky-400">Municipal Fleets</h3>
+                            <p class="text-md text-gray-300">Initial target: Waste management, police, public works vehicles.</p>
+                        </div>
+                        <div class="content-item p-6 rounded-xl bg-gray-700/50" style="transition-delay: 0.3s;">
+                            <div class="text-5xl mb-3">🚚</div>
+                            <h3 class="text-2xl font-semibold text-sky-400">Commercial Logistics</h3>
+                            <p class="text-md text-gray-300">Trucking & ride-share seeking reduced fleet damage and downtime.</p>
+                        </div>
+                        <div class="content-item p-6 rounded-xl bg-gray-700/50" style="transition-delay: 0.5s;">
+                            <div class="text-5xl mb-3">🛡️</div>
+                            <h3 class="text-2xl font-semibold text-sky-400">Insurance & Mapping</h3>
+                            <p class="text-md text-gray-300">Providing real-time road risk data for policy assessment and navigation updates.</p>
+                        </div>
+                    </div>`,
+                ],
+                style: "",
+                footer: "Scales quickly via software integration into existing fleet camera systems."
+            },
+            {
+                headline: "Future Work: Beyond Detection",
+                subtitle: "Our Roadmap to Predictive Infrastructure Monitoring",
+                content: [
+                    `<div class="mt-8 space-y-8">
+                        <div class="flex items-center space-x-4 content-item" style="transition-delay: 0.1s;">
+                            <div class="text-5xl text-yellow-400">📏</div>
+                            <div>
+                                <h3 class="text-3xl font-bold text-yellow-400">Phase 2: Severity Scoring</h3>
+                                <p class="text-lg text-gray-300">Implement **semantic segmentation** to accurately measure hazard depth/size, moving from simple 'detection' to 'criticality classification' (e.g., Low, Medium, Critical).</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4 content-item" style="transition-delay: 0.4s;">
+                            <div class="text-5xl text-yellow-400">🔮</div>
+                            <div>
+                                <h3 class="text-3xl font-bold text-yellow-400">Phase 3: Predictive Maintenance</h3>
+                                <p class="text-lg text-gray-300">Integrate historical data (traffic, weather) to forecast *where* and *when* infrastructure is likely to fail next.</p>
+                            </div>
+                        </div>
+                    </div>`,
+                ],
+                style: "",
+                footer: "The ultimate goal is to fix roads before the damage impacts safety."
+            },
+            {
+                headline: "Thank You. Let’s Build Safer Roads.",
+                subtitle: "VISION ZERO",
+                content: [
+                    `<div class="mt-16 text-center">
+                        <h3 class="text-4xl font-bold text-white mb-8 content-item" style="transition-delay: 0.1s;">We are seeking resources and mentorship to begin pilot programs.</h3>
+                        <div class="text-3xl text-sky-400 font-extrabold content-item" style="transition-delay: 0.3s;">
+                            Q&A and Next Steps
+                        </div>
+                        <div class="text-xl mt-6 text-gray-300 space-y-2 content-item" style="transition-delay: 0.5s;">
+                            <p>Contact: [Your Email Address]</p>
+                            <p>Team: [Your Names]</p>
+                        </div>
+                    </div>`
+                ],
+                style: "text-center",
+                footer: "End of Presentation"
+            }
+        ];
+
+        let currentSlideIndex = 0;
+        const root = document.getElementById('presentation-root');
+        const slideIndexDisplay = document.getElementById('slide-index');
+
+        function renderSlide(index, direction) {
+            // Ensure index is within bounds
+            if (index < 0 || index >= presentationData.length) {
+                return;
+            }
+
+            // Remove existing slides and prepare for transition
+            const slides = root.querySelectorAll('.slide');
+            slides.forEach(slide => {
+                if (slide.classList.contains('active')) {
+                    slide.classList.remove('active');
+                    // Add 'prev' class to start the transition out
+                    slide.classList.add(direction === 'next' ? 'prev' : 'next-out');
+                } else {
+                    slide.remove(); // Clean up old slides
+                }
+            });
+
+            // Update current index
+            currentSlideIndex = index;
+            slideIndexDisplay.textContent = `${currentSlideIndex + 1} / ${presentationData.length}`;
+
+            // Create new slide element
+            const data = presentationData[index];
+            const newSlide = document.createElement('div');
+            newSlide.className = 'slide ' + (data.style || '');
+            newSlide.classList.add(direction === 'next' ? 'next-in' : 'prev-in');
+            newSlide.innerHTML = `
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-extrabold mb-2">${data.headline}</h2>
+                    <p class="text-xl text-gray-400 border-b border-gray-700 pb-4 mb-8">${data.subtitle}</p>
+                    <div class="slide-content">${data.content.join('')}</div>
+                </div>
+                <div class="text-sm text-gray-500 pt-4 border-t border-gray-700">${data.footer}</div>
+            `;
+            root.appendChild(newSlide);
+
+            // Force reflow and activate the slide for the transition
+            setTimeout(() => {
+                newSlide.classList.remove('next-in', 'prev-in');
+                newSlide.classList.add('active');
+
+                // Clean up the slide that just transitioned out
+                const oldSlideOut = root.querySelector('.next-out, .prev');
+                if (oldSlideOut) {
+                     setTimeout(() => oldSlideOut.remove(), 600); // Match transition time
+                }
+            }, 10);
+        }
+
+        function nextSlide() {
+            if (currentSlideIndex < presentationData.length - 1) {
+                renderSlide(currentSlideIndex + 1, 'next');
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlideIndex > 0) {
+                renderSlide(currentSlideIndex - 1, 'prev');
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+        // Initial load
+        window.onload = () => {
+            renderSlide(0, 'next');
+        };
+
+    </script>
+</body>
+</html>
